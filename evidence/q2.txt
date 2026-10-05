@@ -1,0 +1,52 @@
+oppDescribe ||| GET ||| /services/data/v67.0/sobjects/Opportunity/describe
+leadDescribe ||| GET ||| /services/data/v67.0/sobjects/Lead/describe
+me ||| Q ||| SELECT Profile.Name, Profile.PermissionsViewAllData, Profile.PermissionsModifyAllData, Profile.PermissionsQueryAllFiles, Profile.PermissionsCustomizeApplication FROM User WHERE Username = '<audit-username>'
+oppStage ||| Q ||| SELECT RecordType.Name rt, StageName s, COUNT(Id) c FROM Opportunity GROUP BY RecordType.Name, StageName
+oppStage12 ||| Q ||| SELECT RecordType.Name rt, StageName s, COUNT(Id) c FROM Opportunity WHERE CreatedDate = LAST_N_MONTHS:12 GROUP BY RecordType.Name, StageName
+oppTrend ||| Q ||| SELECT CALENDAR_YEAR(CreatedDate) y, CALENDAR_MONTH(CreatedDate) m, COUNT(Id) c FROM Opportunity WHERE CreatedDate = LAST_N_MONTHS:12 GROUP BY CALENDAR_YEAR(CreatedDate), CALENDAR_MONTH(CreatedDate)
+oppYear ||| Q ||| SELECT CALENDAR_YEAR(CreatedDate) y, COUNT(Id) c FROM Opportunity GROUP BY CALENDAR_YEAR(CreatedDate)
+oppRT12 ||| Q ||| SELECT RecordType.Name rt, IsClosed cl, IsWon w, COUNT(Id) c FROM Opportunity WHERE CreatedDate = LAST_N_MONTHS:12 GROUP BY RecordType.Name, IsClosed, IsWon
+oppOpen ||| Q ||| SELECT RecordType.Name rt, COUNT(Id) c FROM Opportunity WHERE IsClosed = false GROUP BY RecordType.Name
+oppOpenNoAct30 ||| Q ||| SELECT RecordType.Name rt, COUNT(Id) c FROM Opportunity WHERE IsClosed = false AND (LastActivityDate = null OR LastActivityDate < LAST_N_DAYS:30) GROUP BY RecordType.Name
+oppOpenStale90 ||| Q ||| SELECT RecordType.Name rt, COUNT(Id) c FROM Opportunity WHERE IsClosed = false AND LastModifiedDate < LAST_N_DAYS:90 GROUP BY RecordType.Name
+oppOpenPastClose ||| Q ||| SELECT RecordType.Name rt, COUNT(Id) c FROM Opportunity WHERE IsClosed = false AND CloseDate < TODAY GROUP BY RecordType.Name
+oppSource12 ||| Q ||| SELECT LeadSource ls, COUNT(Id) c FROM Opportunity WHERE CreatedDate = LAST_N_MONTHS:12 GROUP BY LeadSource
+oppType12 ||| Q ||| SELECT Type t, COUNT(Id) c FROM Opportunity WHERE CreatedDate = LAST_N_MONTHS:12 GROUP BY Type
+oppOwners12 ||| Q ||| SELECT Owner.UserRole.Name r, COUNT(Id) c FROM Opportunity WHERE CreatedDate = LAST_N_MONTHS:12 GROUP BY Owner.UserRole.Name
+oppNoAmount12 ||| Q ||| SELECT COUNT(Id) c FROM Opportunity WHERE CreatedDate = LAST_N_MONTHS:12 AND Amount = null
+oppNoContactRole12 ||| Q ||| SELECT COUNT(Id) c FROM Opportunity WHERE CreatedDate = LAST_N_MONTHS:12 AND Id NOT IN (SELECT OpportunityId FROM OpportunityContactRole)
+ocrRoles ||| Q ||| SELECT Role r, COUNT(Id) c FROM OpportunityContactRole GROUP BY Role
+oppTeamRoles ||| Q ||| SELECT TeamMemberRole r, COUNT(Id) c FROM OpportunityTeamMember GROUP BY TeamMemberRole
+oppHist12 ||| Q ||| SELECT COUNT(Id) c FROM OpportunityHistory WHERE CreatedDate = LAST_N_MONTHS:12
+leadStatus12 ||| Q ||| SELECT Status s, IsConverted cv, COUNT(Id) c FROM Lead WHERE CreatedDate = LAST_N_MONTHS:12 GROUP BY Status, IsConverted
+leadSource12 ||| Q ||| SELECT LeadSource ls, COUNT(Id) c FROM Lead WHERE CreatedDate = LAST_N_MONTHS:12 GROUP BY LeadSource
+leadOpenNoAct ||| Q ||| SELECT COUNT(Id) c FROM Lead WHERE IsConverted = false AND CreatedDate = LAST_N_MONTHS:12 AND (LastActivityDate = null)
+c12Lead ||| Q ||| SELECT COUNT(Id) c FROM Lead WHERE CreatedDate = LAST_N_MONTHS:12
+c12Account ||| Q ||| SELECT COUNT(Id) c FROM Account WHERE CreatedDate = LAST_N_MONTHS:12
+c12Contact ||| Q ||| SELECT COUNT(Id) c FROM Contact WHERE CreatedDate = LAST_N_MONTHS:12
+c12Task ||| Q ||| SELECT COUNT(Id) c FROM Task WHERE CreatedDate = LAST_N_MONTHS:12
+c12TaskOpp ||| Q ||| SELECT TaskSubtype st, COUNT(Id) c FROM Task WHERE CreatedDate = LAST_N_MONTHS:12 AND What.Type = 'Opportunity' GROUP BY TaskSubtype
+c12TaskOpen ||| Q ||| SELECT COUNT(Id) c FROM Task WHERE IsClosed = false AND ActivityDate < TODAY AND What.Type = 'Opportunity'
+c12Event ||| Q ||| SELECT COUNT(Id) c FROM Event WHERE CreatedDate = LAST_N_MONTHS:12
+c12EventOpp ||| Q ||| SELECT COUNT(Id) c FROM Event WHERE CreatedDate = LAST_N_MONTHS:12 AND What.Type = 'Opportunity'
+c12Email ||| Q ||| SELECT COUNT(Id) c FROM EmailMessage WHERE CreatedDate = LAST_N_MONTHS:12
+c12LogTime ||| Q ||| SELECT COUNT(Id) c FROM Log_Time__c WHERE CreatedDate = LAST_N_MONTHS:12
+c12Project ||| Q ||| SELECT COUNT(Id) c FROM AcctSeed__Project__c WHERE CreatedDate = LAST_N_MONTHS:12
+c12Billing ||| Q ||| SELECT COUNT(Id) c FROM AcctSeed__Billing__c WHERE CreatedDate = LAST_N_MONTHS:12
+c12CashReceipt ||| Q ||| SELECT COUNT(Id) c FROM AcctSeed__Cash_Receipt__c WHERE CreatedDate = LAST_N_MONTHS:12
+c12Case ||| Q ||| SELECT COUNT(Id) c FROM Case WHERE CreatedDate = LAST_N_MONTHS:12
+c12TimeCardDay ||| Q ||| SELECT COUNT(Id) c FROM AcctSeed__Time_Card_Day__c WHERE CreatedDate = LAST_N_MONTHS:12
+c12ProjUnm ||| Q ||| SELECT COUNT(Id) c FROM Project_Unmanaged__c WHERE CreatedDate = LAST_N_MONTHS:12
+c12Survey ||| Q ||| SELECT COUNT(Id) c FROM TIMBASURVEYS__Survey_Summary__c WHERE CreatedDate = LAST_N_MONTHS:12
+c12Callflow ||| Q ||| SELECT COUNT(Id) c FROM ringdna__Call_Flow__c WHERE CreatedDate = LAST_N_MONTHS:12
+projOpp ||| Q ||| SELECT COUNT(Id) c FROM AcctSeed__Project__c WHERE AcctSeed__Opportunity__c != null
+docusign12 ||| Q ||| SELECT dfsle__Status__c s, COUNT(Id) c FROM dfsle__EnvelopeStatus__c WHERE CreatedDate = LAST_N_MONTHS:12 GROUP BY dfsle__Status__c
+adobeSign12 ||| Q ||| SELECT echosign_dev1__Status__c s, COUNT(Id) c FROM echosign_dev1__SIGN_Agreement__c WHERE CreatedDate = LAST_N_MONTHS:12 GROUP BY echosign_dev1__Status__c
+oppScore ||| Q ||| SELECT COUNT(Id) c FROM OpportunityScore
+leadScore ||| Q ||| SELECT COUNT(Id) c FROM LeadIntelligence
+activityCapture ||| Q ||| SELECT COUNT(Id) c FROM ActivityMetric
+salesCadence ||| Q ||| SELECT COUNT(Id) c FROM ActionCadence
+actionPlanTemplate ||| Q ||| SELECT COUNT(Id) c FROM ActionPlanTemplate
+pathAssist ||| T ||| SELECT Id, DeveloperName, IsActive, SobjectType FROM PathAssistant
+promptTemplatesQ ||| Q ||| SELECT Id, DeveloperName, MasterLabel FROM GenAiPromptTemplate
+aiPsAssign ||| Q ||| SELECT PermissionSet.Name n, COUNT(Id) c FROM PermissionSetAssignment WHERE Assignee.IsActive = true AND (PermissionSet.Name LIKE '%Einstein%' OR PermissionSet.Name LIKE '%Agent%' OR PermissionSet.Name LIKE '%GenAI%' OR PermissionSet.Name LIKE '%Prompt%' OR PermissionSet.Name LIKE '%Copilot%' OR PermissionSet.Name LIKE '%AI%') GROUP BY PermissionSet.Name

@@ -1,0 +1,4 @@
+oppStages ||| Q ||| SELECT MasterLabel, IsActive, IsClosed, IsWon, DefaultProbability, ForecastCategoryName FROM OpportunityStage
+retTrend ||| Q ||| SELECT CALENDAR_YEAR(CreatedDate) y, CALENDAR_MONTH(CreatedDate) m, COUNT(Id) c FROM Opportunity WHERE RecordType.Name = 'Retention' AND CreatedDate = LAST_N_MONTHS:12 GROUP BY CALENDAR_YEAR(CreatedDate), CALENDAR_MONTH(CreatedDate)
+leadPrior ||| Q ||| SELECT COUNT(Id) c FROM Lead WHERE CreatedDate = LAST_N_MONTHS:24 AND CreatedDate < LAST_N_MONTHS:12
+oppPrior ||| Q ||| SELECT COUNT(Id) c FROM Opportunity WHERE CreatedDate = LAST_N_MONTHS:24 AND CreatedDate < LAST_N_MONTHS:12

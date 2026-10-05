@@ -1,0 +1,19 @@
+mm24 ||| Q ||| SELECT Matter_Management__c mm, COUNT(Id) c FROM Opportunity WHERE RecordType.Name = 'Retention' AND CreatedDate = LAST_N_MONTHS:24 GROUP BY Matter_Management__c
+retActive ||| Q ||| SELECT COUNT(Id) c FROM Opportunity WHERE RecordType.Name = 'Retention' AND Matter_Closed_Date__c = null
+retActive24 ||| Q ||| SELECT COUNT(Id) c FROM Opportunity WHERE RecordType.Name = 'Retention' AND Matter_Closed_Date__c = null AND CreatedDate = LAST_N_MONTHS:24
+retClosed12 ||| Q ||| SELECT COUNT(Id) c FROM Opportunity WHERE RecordType.Name = 'Retention' AND Matter_Closed_Date__c = LAST_N_MONTHS:12
+lostReason12 ||| Q ||| SELECT Closed_Lost_Reason__c r, COUNT(Id) c FROM Opportunity WHERE RecordType.Name = 'Consultation' AND StageName = 'Consult Attended - Not Retained' AND CreatedDate = LAST_N_MONTHS:12 GROUP BY Closed_Lost_Reason__c
+conflict12 ||| Q ||| SELECT Initial_Conflict_Check_Result__c r, COUNT(Id) c FROM Opportunity WHERE RecordType.Name = 'Consultation' AND CreatedDate = LAST_N_MONTHS:12 GROUP BY Initial_Conflict_Check_Result__c
+consultDate12 ||| Q ||| SELECT COUNT(Id) c FROM Opportunity WHERE RecordType.Name = 'Consultation' AND CreatedDate = LAST_N_MONTHS:12 AND Consultation_Date__c = null
+contractSent12 ||| Q ||| SELECT COUNT(Id) c FROM Opportunity WHERE RecordType.Name = 'Retention' AND CreatedDate = LAST_N_MONTHS:12 AND Initial_Contract_Sent__c = null
+contractSigned12 ||| Q ||| SELECT COUNT(Id) c FROM Opportunity WHERE RecordType.Name = 'Retention' AND CreatedDate = LAST_N_MONTHS:12 AND Initial_Contract_Received_Signed__c = null
+followUp12 ||| Q ||| SELECT Follow_Up__c f, Do_Not_Follow_Up__c d, COUNT(Id) c FROM Opportunity WHERE RecordType.Name = 'Consultation' AND StageName = 'Consult Attended - Not Retained' AND CreatedDate = LAST_N_MONTHS:12 GROUP BY Follow_Up__c, Do_Not_Follow_Up__c
+current12 ||| Q ||| SELECT Current_Situation__c s, COUNT(Id) c FROM Opportunity WHERE CreatedDate = LAST_N_MONTHS:12 GROUP BY Current_Situation__c ORDER BY COUNT(Id) DESC LIMIT 12
+openConsultOld ||| Q ||| SELECT CALENDAR_YEAR(CreatedDate) y, COUNT(Id) c FROM Opportunity WHERE RecordType.Name = 'Consultation' AND IsClosed = false GROUP BY CALENDAR_YEAR(CreatedDate)
+openConsultStage ||| Q ||| SELECT StageName s, COUNT(Id) c FROM Opportunity WHERE RecordType.Name = 'Consultation' AND IsClosed = false GROUP BY StageName
+nps12 ||| Q ||| SELECT COUNT(Id) c FROM Opportunity WHERE NPS__c != null AND CreatedDate = LAST_N_MONTHS:24
+projStatus ||| Q ||| SELECT AcctSeed__Status__c s, COUNT(Id) c FROM AcctSeed__Project__c GROUP BY AcctSeed__Status__c
+retTasks12 ||| Q ||| SELECT COUNT(Id) c FROM Task WHERE What.Type = 'Opportunity' AND CreatedDate = LAST_N_MONTHS:12 AND What.RecordType.Name = 'Retention'
+emailOpp12 ||| Q ||| SELECT COUNT(Id) c FROM EmailMessage WHERE CreatedDate = LAST_N_MONTHS:12 AND RelatedTo.Type = 'Opportunity'
+taskNoDesc ||| Q ||| SELECT COUNT(Id) c FROM Task WHERE What.Type = 'Opportunity' AND CreatedDate = LAST_N_MONTHS:12 AND TaskSubtype = 'Call'
+pbFlows ||| Q ||| SELECT ApiName, ProcessType, IsActive, LastModifiedDate FROM FlowDefinitionView WHERE ProcessType = 'Workflow' AND NamespacePrefix = null

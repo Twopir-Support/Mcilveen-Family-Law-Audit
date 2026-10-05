@@ -1,0 +1,77 @@
+# label ||| kind (Q=soql, T=tooling, GET=path) ||| query
+userLicense ||| Q ||| SELECT Name, MasterLabel, TotalLicenses, UsedLicenses, Status FROM UserLicense
+psl ||| Q ||| SELECT MasterLabel, DeveloperName, TotalLicenses, UsedLicenses, ExpirationDate, Status FROM PermissionSetLicense
+tenantEnt ||| Q ||| SELECT MasterLabel, ResourceGroupKey, AmountUsed, CurrentAmountAllowed, Frequency, StartDate, EndDate, UsageDate FROM TenantUsageEntitlement
+limits ||| GET ||| /services/data/v67.0/limits
+recordCount ||| GET ||| /services/data/v67.0/limits/recordCount
+org ||| Q ||| SELECT OrganizationType, IsSandbox, CreatedDate, LanguageLocaleKey, DefaultLocaleSidKey, TimeZoneSidKey, NumKnowledgeService, PreferencesRequireOpportunityProducts FROM Organization
+usersByLicense ||| Q ||| SELECT Profile.UserLicense.Name lic, IsActive act, COUNT(Id) c FROM User GROUP BY Profile.UserLicense.Name, IsActive
+usersByType ||| Q ||| SELECT UserType t, IsActive act, COUNT(Id) c FROM User GROUP BY UserType, IsActive
+usersByProfile ||| Q ||| SELECT Profile.Name p, COUNT(Id) c FROM User WHERE IsActive = true GROUP BY Profile.Name
+usersByRole ||| Q ||| SELECT UserRole.Name r, COUNT(Id) c FROM User WHERE IsActive = true AND UserType = 'Standard' GROUP BY UserRole.Name
+login30 ||| Q ||| SELECT COUNT(Id) c FROM User WHERE IsActive = true AND UserType = 'Standard' AND LastLoginDate = LAST_N_DAYS:30
+login90 ||| Q ||| SELECT COUNT(Id) c FROM User WHERE IsActive = true AND UserType = 'Standard' AND LastLoginDate = LAST_N_DAYS:90
+featKnowledge ||| Q ||| SELECT COUNT(Id) c FROM User WHERE IsActive = true AND UserPermissionsKnowledgeUser = true
+featMarketing ||| Q ||| SELECT COUNT(Id) c FROM User WHERE IsActive = true AND UserPermissionsMarketingUser = true
+featSupport ||| Q ||| SELECT COUNT(Id) c FROM User WHERE IsActive = true AND UserPermissionsSupportUser = true
+featLiveAgent ||| Q ||| SELECT COUNT(Id) c FROM User WHERE IsActive = true AND UserPermissionsLiveAgentUser = true
+featFlow ||| Q ||| SELECT COUNT(Id) c FROM User WHERE IsActive = true AND UserPermissionsInteractionUser = true
+featOffline ||| Q ||| SELECT COUNT(Id) c FROM User WHERE IsActive = true AND UserPermissionsOfflineUser = true
+featSFContent ||| Q ||| SELECT COUNT(Id) c FROM User WHERE IsActive = true AND UserPermissionsSFContentUser = true
+featCallCenter ||| Q ||| SELECT COUNT(Id) c FROM User WHERE IsActive = true AND CallCenterId != null
+pslAssign ||| Q ||| SELECT PermissionSetLicense.MasterLabel l, COUNT(Id) c FROM PermissionSetLicenseAssign GROUP BY PermissionSetLicense.MasterLabel
+psAssign ||| Q ||| SELECT PermissionSet.Name n, PermissionSet.Label lb, COUNT(Id) c FROM PermissionSetAssignment WHERE PermissionSet.IsOwnedByProfile = false AND Assignee.IsActive = true GROUP BY PermissionSet.Name, PermissionSet.Label
+permSets ||| Q ||| SELECT Name, Label, NamespacePrefix, License.Name, Type FROM PermissionSet WHERE IsOwnedByProfile = false
+botDef ||| Q ||| SELECT Id, DeveloperName, MasterLabel, Type, CreatedDate FROM BotDefinition
+botVer ||| Q ||| SELECT BotDefinitionId, VersionNumber, Status FROM BotVersion
+genAiPlanner ||| T ||| SELECT Id, DeveloperName, MasterLabel, PlannerType, CreatedDate FROM GenAiPlannerDefinition
+genAiPrompt ||| T ||| SELECT Id, DeveloperName, MasterLabel, CreatedDate FROM GenAiPromptTemplate
+genAiFunction ||| T ||| SELECT Id, DeveloperName, MasterLabel FROM GenAiFunctionDefinition
+installedPkgs ||| T ||| SELECT SubscriberPackage.Name, SubscriberPackage.NamespacePrefix, SubscriberPackageVersion.Name, SubscriberPackageVersion.MajorVersion, SubscriberPackageVersion.MinorVersion FROM InstalledSubscriberPackage
+connectedApps ||| Q ||| SELECT Name, CreatedDate, OptionsAllowAdminApprovedUsersOnly FROM ConnectedApplication
+namedCreds ||| T ||| SELECT DeveloperName, MasterLabel, Endpoint FROM NamedCredential
+remoteSites ||| T ||| SELECT SiteName, EndpointUrl, IsActive FROM RemoteProxy
+authProviders ||| Q ||| SELECT FriendlyName, ProviderType FROM AuthProvider
+oauthTokens ||| Q ||| SELECT AppName, COUNT(Id) c FROM OauthToken GROUP BY AppName
+flows ||| Q ||| SELECT ApiName, Label, ProcessType, TriggerType, TriggerObjectOrEventLabel, IsActive, LastModifiedDate, NamespacePrefix FROM FlowDefinitionView
+triggers ||| T ||| SELECT Name, TableEnumOrId, Status, NamespacePrefix FROM ApexTrigger
+apexClassCount ||| T ||| SELECT NamespacePrefix, COUNT(Id) c FROM ApexClass GROUP BY NamespacePrefix
+approvals ||| Q ||| SELECT Name, TableEnumOrId, State, Type FROM ProcessDefinition
+workflowRules ||| T ||| SELECT Name, TableEnumOrId, NamespacePrefix FROM WorkflowRule
+validationRules ||| T ||| SELECT EntityDefinition.QualifiedApiName, ValidationName, Active, NamespacePrefix FROM ValidationRule
+recordTypes ||| Q ||| SELECT SobjectType, Name, DeveloperName, IsActive, NamespacePrefix FROM RecordType
+customObjects ||| T ||| SELECT QualifiedApiName, Label, NamespacePrefix FROM EntityDefinition WHERE IsCustomizable = true AND IsCustomSetting = false
+sobjects ||| GET ||| /services/data/v67.0/sobjects
+kav ||| Q ||| SELECT PublishStatus, COUNT(Id) c FROM KnowledgeArticleVersion GROUP BY PublishStatus
+serviceChannel ||| Q ||| SELECT DeveloperName, MasterLabel, RelatedEntity FROM ServiceChannel
+routingConfig ||| Q ||| SELECT DeveloperName, MasterLabel, RoutingModel FROM QueueRoutingConfig
+presenceConfig ||| Q ||| SELECT DeveloperName, MasterLabel FROM PresenceUserConfig
+queues ||| Q ||| SELECT Name, DeveloperName FROM Group WHERE Type = 'Queue'
+queueSobjects ||| Q ||| SELECT Queue.Name, SobjectType FROM QueueSobject
+assignmentRules ||| Q ||| SELECT Name, SobjectType, Active FROM AssignmentRule
+emailTemplates ||| Q ||| SELECT FolderName, TemplateType, IsActive, COUNT(Id) c FROM EmailTemplate GROUP BY FolderName, TemplateType, IsActive
+reports ||| Q ||| SELECT COUNT(Id) c FROM Report
+reportsRun90 ||| Q ||| SELECT COUNT(Id) c FROM Report WHERE LastRunDate = LAST_N_DAYS:90
+dashboards ||| Q ||| SELECT COUNT(Id) c FROM Dashboard
+entitlements ||| Q ||| SELECT COUNT(Id) c FROM Entitlement
+slaProcess ||| Q ||| SELECT Name, IsActive, SobjectType FROM SlaProcess
+macros ||| Q ||| SELECT COUNT(Id) c FROM Macro
+quickText ||| Q ||| SELECT COUNT(Id) c FROM QuickText
+emailServices ||| Q ||| SELECT DeveloperName, IsActive FROM EmailServicesFunction
+emailToCase ||| Q ||| SELECT COUNT(Id) c FROM EmailServicesAddress
+networks ||| Q ||| SELECT Name, Status, UrlPathPrefix FROM Network
+sites ||| Q ||| SELECT Name, Status, SiteType FROM Site
+dupRules ||| Q ||| SELECT SobjectType, DeveloperName, IsActive FROM DuplicateRule
+matchRules ||| Q ||| SELECT SobjectType, DeveloperName, MatchingRuleStatus FROM MatchingRule
+liveChat ||| Q ||| SELECT COUNT(Id) c FROM LiveChatDeployment
+messagingChannel ||| Q ||| SELECT DeveloperName, MessageType, IsActive FROM MessagingChannel
+survey ||| Q ||| SELECT COUNT(Id) c FROM Survey
+contentDocs ||| Q ||| SELECT COUNT(Id) c FROM ContentDocument
+scheduledJobs ||| Q ||| SELECT CronJobDetail.JobType jt, COUNT(Id) c FROM CronTrigger GROUP BY CronJobDetail.JobType
+asyncJobs90 ||| Q ||| SELECT JobType, Status, COUNT(Id) c FROM AsyncApexJob WHERE CreatedDate = LAST_N_DAYS:30 GROUP BY JobType, Status
+paths ||| Q ||| SELECT COUNT(Id) c FROM PathAssistant
+territory ||| Q ||| SELECT COUNT(Id) c FROM Territory2
+forecastType ||| Q ||| SELECT DeveloperName, IsActive FROM ForecastingType
+lightningPages ||| T ||| SELECT DeveloperName, Type, EntityDefinitionId FROM FlexiPage
+customApps ||| Q ||| SELECT Label, DeveloperName, NamespacePrefix, UiType FROM AppMenuItem WHERE Type = 'TabSet'
+einsteinSettings ||| T ||| SELECT Id FROM EinsteinGptSettings
